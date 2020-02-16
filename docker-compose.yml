@@ -46,29 +46,35 @@ services:
       - sqlite_db:/files/sqlite
 
   keycloak:
-      image: jboss/keycloak:6.0.4
-      environment:
-        KEYCLOAK_USER: admin
-        KEYCLOAK_PASSWORD: password
-        DB_VENDOR: MYSQL
-        DB_ADDR: mysql
-        DB_DATABASE: keycloak
-        DB_USER: keycloak
-        DB_PASSWORD: password
-      ports:
-        - 8080:8080
-      depends_on:
-        - mysql
+    image: jboss/keycloak:6.0.1
+    environment:
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: password
+      DB_VENDOR: MYSQL
+      DB_ADDR: mysql
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_PASSWORD: password
+    ports:
+      - 8080:8080
+    depends_on:
+      - mysql
+    volumes: 
+      - ./keycloak/setup-saml.sh:/bin/setup-saml.sh
 
   mysql:
-      image: mysql:5.7
-      environment:
-        MYSQL_ROOT_PASSWORD: root
-        MYSQL_DATABASE: keycloak
-        MYSQL_USER: keycloak
-        MYSQL_PASSWORD: password
-      volumes:
-        - mysql_data:/var/lib/mysql
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: keycloak
+      MYSQL_USER: keycloak
+      MYSQL_PASSWORD: password
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  centos:
+    image: centos:6
+    tty: true
 
 volumes:
   mongo_configdb:
