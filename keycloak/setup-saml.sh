@@ -16,8 +16,6 @@ kcadm.sh get realms/${REALM_NAME} > /dev/null || kcadm.sh create realms -f - << 
 { "realm": "${REALM_NAME}", "enabled": true, "internationalizationEnabled": true, "defaultLocale": "ja" }
 EOF
 
-echo 'docker-entrypoint.sh: created a realm for GROWI if not exist'
-
 # GROWI用のクライアントプロファイルを作成する(存在しない場合のみ)
 kcadm.sh get clients -r ${REALM_NAME} --fields=clientId | grep ${GROWI_APP_FQDN} > /dev/null 2>&1 || kcadm.sh create clients -r ${REALM_NAME} -f - << EOF
 {
@@ -165,4 +163,4 @@ kcadm.sh get clients -r ${REALM_NAME} --fields=clientId | grep ${HACKMD_FQDN} > 
 EOF
 
 CERTIFICATE=`kcadm.sh get keys -r ${REALM_NAME} | jq '.keys[] | select(.type == "RSA") | .certificate' -r`
-echo CERTIFICATE
+echo $CERTIFICATE
